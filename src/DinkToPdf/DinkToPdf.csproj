@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>DinkToPdf</RootNamespace>
+		<Version>1.0.9</Version>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Folder Include="Properties\" />
+	</ItemGroup>
+
+</Project>

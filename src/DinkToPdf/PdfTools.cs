@@ -32,7 +32,7 @@ namespace DinkToPdf
 
         public bool ExtendedQt()
         {
-            return WkHtmlToXBindings.wkhtmltopdf_extended_qt() == 1 ? true : false;
+            return WkHtmlToXBindings.wkhtmltopdf_extended_qt() == 1;
         }
 
         public string GetLibraryVersion()
@@ -57,7 +57,7 @@ namespace DinkToPdf
 
             fixed (byte* tempBuffer = buffer  )
             {
-                WkHtmlToXBindings.wkhtmltopdf_get_global_setting(settings, name, tempBuffer, buffer.Length);
+                _ = WkHtmlToXBindings.wkhtmltopdf_get_global_setting(settings, name, tempBuffer, buffer.Length);
             }
 
             return GetString(buffer);
@@ -65,7 +65,7 @@ namespace DinkToPdf
 
         public void DestroyGlobalSetting(IntPtr settings)
         {
-            WkHtmlToXBindings.wkhtmltopdf_destroy_global_settings(settings);
+            _ = WkHtmlToXBindings.wkhtmltopdf_destroy_global_settings(settings);
         }
 
         public IntPtr CreateObjectSettings()
@@ -85,7 +85,7 @@ namespace DinkToPdf
 
             fixed (byte* tempBuffer = buffer)
             {
-                WkHtmlToXBindings.wkhtmltopdf_get_object_setting(settings, name, tempBuffer, buffer.Length);
+                _ = WkHtmlToXBindings.wkhtmltopdf_get_object_setting(settings, name, tempBuffer, buffer.Length);
             }
 
             return GetString(buffer);
@@ -93,7 +93,7 @@ namespace DinkToPdf
 
         public void DestroyObjectSetting(IntPtr settings)
         {
-            WkHtmlToXBindings.wkhtmltopdf_destroy_object_settings(settings);
+            _ = WkHtmlToXBindings.wkhtmltopdf_destroy_object_settings(settings);
         }
 
         public IntPtr CreateConverter(IntPtr globalSettings)
@@ -123,9 +123,7 @@ namespace DinkToPdf
 
         public byte[] GetConversionResult(IntPtr converter)
         {
-            IntPtr resultPointer;
-
-            int length = WkHtmlToXBindings.wkhtmltopdf_get_output(converter, out resultPointer);
+            int length = WkHtmlToXBindings.wkhtmltopdf_get_output(converter, out IntPtr resultPointer);
             var result = new byte[length];
             Marshal.Copy(resultPointer, result, 0, length);
 
@@ -218,8 +216,6 @@ namespace DinkToPdf
 
         private string GetString(byte[] buffer)
         {
-            string value = "";
-
             int walk = 0;
 
             while (walk < buffer.Length && buffer[walk] != 0)
@@ -227,8 +223,7 @@ namespace DinkToPdf
                 walk++;
             }
 
-            value = Encoding.UTF8.GetString(buffer, 0, walk);
-
+            var value = Encoding.UTF8.GetString(buffer, 0, walk);
             return value;
         }
     }
